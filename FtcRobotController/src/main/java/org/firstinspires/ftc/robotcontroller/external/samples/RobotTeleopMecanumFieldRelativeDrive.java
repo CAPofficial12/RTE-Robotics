@@ -134,20 +134,22 @@ public class RobotTeleopMecanumFieldRelativeDrive extends OpMode {
 
     // Thanks to FTC16072 for sharing this code!!
     public void drive(double forward, double right, double rotate) {
-        // This calculates the power needed for each wheel based on the amount of forward,
-        // strafe right, and rotate
+        // Converts Cartesian coordinate into polar coordinates
         double power = Math.hypot(forward, right);
         double theta = Math.atan2(forward, right);
 
+        // Calculated to sin
         double sin = Math.sin(theta - Math.PI/4);
         double cos = Math.cos(theta - Math.PI/4);
         double max = Math.max(Math.abs(cos), Math.abs(sin));
 
+        // Calculatesd the power each motor needs
         double frontLeftPower = power * cos/max + rotate;
         double frontRightPower = power * cos/max - rotate;
         double backRightPower = power * cos/max - rotate;
         double backLeftPower = power * cos/max + rotate;
 
+        // Normlised Power
         if ((power + Math.abs(rotate)) > 1){
             frontLeftPower /= max;
             frontRightPower /= max;
