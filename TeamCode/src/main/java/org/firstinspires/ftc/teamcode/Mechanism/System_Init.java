@@ -1,10 +1,19 @@
 package org.firstinspires.ftc.teamcode.Mechanism;
+import android.util.Size;
+
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 public class System_Init {
     DcMotorEx backLeftDrive;
@@ -13,6 +22,7 @@ public class System_Init {
     DcMotorEx shooter;
     Servo Hoodleft;
     Servo Hoodright;
+    Limelight3A limelight3A;
     IMU imu;
 
     public void init (HardwareMap Hwmap){
@@ -44,6 +54,7 @@ public class System_Init {
         shooter = Hwmap.get(DcMotorEx.class, "shooter");
         Hoodleft = Hwmap.get(Servo.class, "Hoodleft");
         Hoodright = Hwmap.get(Servo.class, "Hoodright");
-
+        limelight3A = Hwmap.get(Limelight3A.class, "limelight");
+        limelight3A.pipelineSwitch(6);
     }
 }
