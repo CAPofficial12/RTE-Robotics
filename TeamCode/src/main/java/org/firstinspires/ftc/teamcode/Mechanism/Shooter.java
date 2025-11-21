@@ -18,7 +18,7 @@ public class Shooter {
     double Kp_Shoot = Constants_TeleOp.Kp_Shoot, Kd_shoot = Constants_TeleOp.Kd_Shoot, Ki_shoot = Constants_TeleOp.Ki_Shoot, Kf_Shoot = Constants_TeleOp.Kf_Shoot;
 
 
-    public void SpeedCalc(double distance){
+    public double SpeedCalc(double distance){
         speed = 5*distance;
         hood = distance/10;
         double dtS = Math.max(timerS.seconds(), 1e-6);
@@ -32,5 +32,6 @@ public class Shooter {
         Shooter.setVelocity(shoot);
         lastShooterPos = Shooter.getCurrentPosition();
         timerS.reset();
+        return shoot;
     }
 }
