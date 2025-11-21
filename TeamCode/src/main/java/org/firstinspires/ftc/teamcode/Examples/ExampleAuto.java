@@ -1,5 +1,4 @@
 package org.firstinspires.ftc.teamcode.Examples; // make sure this aligns with class location
-
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
@@ -23,6 +22,64 @@ public class ExampleAuto extends OpMode {
     private final Pose pickup1Pose = new Pose(37, 121, Math.toRadians(0)); // Highest (First Set) of Artifacts from the Spike Mark.
     private final Pose pickup2Pose = new Pose(43, 130, Math.toRadians(0)); // Middle (Second Set) of Artifacts from the Spike Mark.
     private final Pose pickup3Pose = new Pose(49, 135, Math.toRadians(0)); // Lowest (Third Set) of Artifacts from the Spike Mark.
+
+    /**
+     * This is the main loop of the OpMode, it will run repeatedly after clicking "Play".
+     **/
+    @Override
+    public void loop() {
+
+        // These loop the movements of the robot, these must be called continuously in order to work
+        follower.update();
+        autonomousPathUpdate();
+
+        // Feedback to Driver Hub for debugging
+        telemetry.addData("path state", pathState);
+        telemetry.addData("x", follower.getPose().getX());
+        telemetry.addData("y", follower.getPose().getY());
+        telemetry.addData("heading", follower.getPose().getHeading());
+        telemetry.update();
+    }
+
+    /**
+     * This method is called once at the init of the OpMode.
+     **/
+    @Override
+    public void init() {
+        pathTimer = new Timer();
+        opmodeTimer = new Timer();
+        opmodeTimer.resetTimer();
+
+
+        follower = Constants.createFollower(hardwareMap);
+        buildPaths();
+        follower.setStartingPose(startPose);
+
+    }
+
+    /**
+     * This method is called continuously after Init while waiting for "play".
+     **/
+    @Override
+    public void init_loop() {
+    }
+
+    /**
+     * This method is called once at the start of the OpMode.
+     * It runs all the setup actions, including building paths and starting the path system
+     **/
+    @Override
+    public void start() {
+        opmodeTimer.resetTimer();
+        setPathState(0);
+    }
+
+    /**
+     * We do not use this because everything should automatically disable
+     **/
+    @Override
+    public void stop() {
+    }
 
     private Path scorePreload;
     private PathChain grabPickup1, scorePickup1, grabPickup2, scorePickup2, grabPickup3, scorePickup3;
@@ -162,51 +219,4 @@ public class ExampleAuto extends OpMode {
         pathState = pState;
         pathTimer.resetTimer();
     }
-
-    /** This is the main loop of the OpMode, it will run repeatedly after clicking "Play". **/
-    @Override
-    public void loop() {
-
-        // These loop the movements of the robot, these must be called continuously in order to work
-        follower.update();
-        autonomousPathUpdate();
-
-        // Feedback to Driver Hub for debugging
-        telemetry.addData("path state", pathState);
-        telemetry.addData("x", follower.getPose().getX());
-        telemetry.addData("y", follower.getPose().getY());
-        telemetry.addData("heading", follower.getPose().getHeading());
-        telemetry.update();
-    }
-
-    /** This method is called once at the init of the OpMode. **/
-    @Override
-    public void init() {
-        pathTimer = new Timer();
-        opmodeTimer = new Timer();
-        opmodeTimer.resetTimer();
-
-
-        follower = Constants.createFollower(hardwareMap);
-        buildPaths();
-        follower.setStartingPose(startPose);
-
-    }
-
-    /** This method is called continuously after Init while waiting for "play". **/
-    @Override
-    public void init_loop() {}
-
-    /** This method is called once at the start of the OpMode.
-     * It runs all the setup actions, including building paths and starting the path system **/
-    @Override
-    public void start() {
-        opmodeTimer.resetTimer();
-        setPathState(0);
-    }
-
-    /** We do not use this because everything should automatically disable **/
-    @Override
-    public void stop() {}
 }
-
