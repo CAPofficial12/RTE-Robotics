@@ -14,6 +14,8 @@ public class System_Init {
     DcMotorEx shooter;
     Servo Hoodleft;
     Servo Hoodright;
+    Servo GateRight;
+    Servo GateLeft;
     Limelight3A limelight3A;
     IMU imu;
 
@@ -46,6 +48,12 @@ public class System_Init {
         shooter = Hwmap.get(DcMotorEx.class, "shooter");
         Hoodleft = Hwmap.get(Servo.class, "Hoodleft");
         Hoodright = Hwmap.get(Servo.class, "Hoodright");
+        Hoodright.setDirection(Servo.Direction.REVERSE);
+
+        GateLeft = Hwmap.get(Servo.class, "Gateleft");
+        GateRight = Hwmap.get(Servo.class, "Gateright");
+        GateRight.setDirection(Servo.Direction.REVERSE);
+
         limelight3A = Hwmap.get(Limelight3A.class, "limelight");
         limelight3A.pipelineSwitch(6);
     }
