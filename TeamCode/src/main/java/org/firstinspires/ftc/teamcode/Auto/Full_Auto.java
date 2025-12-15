@@ -8,6 +8,7 @@ import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
+import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.Mechanism.Gate;
@@ -26,6 +27,7 @@ public class Full_Auto extends OpMode {
     Gate gate = new Gate();
     Intake intake = new Intake();
     Localisation localisation = new Localisation();
+    Timer pathTimer;
 
     private TelemetryManager panelsTelemetry; // Panels Telemetry instance
     public Follower follower; // Pedro Pathing follower instance
@@ -48,10 +50,11 @@ public class Full_Auto extends OpMode {
     double distance;
     @Override
     public void init() {
+        pathTimer = new Timer();
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
         system_init.init(hardwareMap);
         follower = Constants.createFollower(hardwareMap);
-
+        Paths(follower);
         panelsTelemetry.debug("Status", "Initialized");
         panelsTelemetry.update(telemetry);
     }
@@ -185,44 +188,38 @@ public class Full_Auto extends OpMode {
             case 0:
                 follower.followPath(preload);
                 setPathState(1);
-                if (!follower.isBusy()){
-                    break;
-                }
+                break;
             case 1:
                 gate.open();
-                wait(1000);
-                gate.close();
-                setPathState(Pathnum);
-                Pathnum += 1;
-                break;
+                if (pathTimer.getElapsedTimeSeconds() > 2) {
+                    gate.close();
+                    setPathState(Pathnum);
+                    Pathnum += 1;
+                    break;
+                }
             case 2:
                 follower.followPath(Path1);
                 setPathState(1);
-                if (!follower.isBusy()){
-                    break;
-                }
+                break;
             case 3:
                 follower.followPath(Path2);
                 setPathState(1);
-                if (!follower.isBusy()){
-                    break;
-                }
+                break;
+
             case 4:
                 follower.followPath(Path3);
                 setPathState(1);
-                if (!follower.isBusy()){
-                    break;
-                }
+                break;
             case 5:
                 follower.followPath(Path4);
-                if (!follower.isBusy()){
-                    break;
-                }
+                break;
+
         }
         return pathState;
     }
 
     public void setPathState(int pState){
+        pathTimer.resetTimer();
         pathState = pState;
     }
 }
